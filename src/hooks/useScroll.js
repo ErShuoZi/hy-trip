@@ -1,33 +1,44 @@
 import { onMounted,onUnmounted, onActivated,onDeactivated } from 'vue'
 import * as  _ from 'lodash'
 import { ref } from 'vue'
-const scrollTop  = ref(0)
-const scrollHeight = ref(0)
-const clientHeigt  = ref(0)
-  function useScroll (cb) {
+export default function useScroll (elRef) {
+    let el = window
+    const scrollTop  = ref(0)
+    const scrollHeight = ref(0)
+    const clientHeigt  = ref(0)
+    const isReachBottom = ref(false)
 
-  const scrollListenerHandler = _.throttle( () => {
-    scrollTop.value = document.documentElement.scrollTop;
-    scrollHeight.value = document.documentElement.scrollHeight;
-    clientHeigt.value = document.documentElement.clientHeight;
+    const scrollListenerHandler = _.throttle( () => {
+      if(el === window){
+        scrollTop.value = document.documentElement.scrollTop;
+        scrollHeight.value = document.documentElement.scrollHeight;
+        clientHeigt.value = document.documentElement.clientHeight;
+      } else {
+        scrollTop.value = el.scrollTop;
+        scrollHeight.value = el.scrollHeight;
+        clientHeigt.value = el.clientHeight;
+      }
+
 
     if (clientHeigt.value + scrollTop.value >= scrollHeight.value) {
-      if(cb) cb()
+      isReachBottom.value = true
     }
+
   },100)
   
   onMounted(() => {
-    window.addEventListener("scroll", scrollListenerHandler);
+    if(elRef) el = elRef.value
+    el.addEventListener("scroll", scrollListenerHandler);
   })
   onUnmounted(()=> {
-    window.removeEventListener("scroll", scrollListenerHandler);
+    el.removeEventListener("scroll", scrollListenerHandler);
   })
   onActivated(() => {
-    window.addEventListener("scroll",scrollListenerHandler);
+    el.addEventListener("scroll",scrollListenerHandler);
   })
   onDeactivated(() => {
-    window.removeEventListener("scroll", scrollListenerHandler);
+    el.removeEventListener("scroll", scrollListenerHandler);
   })
-}
 
-export  {useScroll ,scrollTop,scrollHeight,clientHeigt}
+  return  { scrollTop,scrollHeight,clientHeigt,isReachBottom }
+}

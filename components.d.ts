@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     Tabbar: typeof import('./src/components/tab-bar/tabbar.vue')['default']
     Tabbar_01: typeof import('./src/components/tab-bar/tabbar_01.vue')['default']
     Tabbar_02: typeof import('./src/components/tab-bar/tabbar_02.vue')['default']
+    TabControl: typeof import('./src/components/tab-control/tab-control.vue')['default']
     VanCalendar: typeof import('vant/es')['Calendar']
     VanCell: typeof import('vant/es')['Cell']
     VanIcon: typeof import('vant/es')['Icon']

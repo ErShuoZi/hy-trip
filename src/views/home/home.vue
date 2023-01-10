@@ -23,7 +23,7 @@ import HomeLoaction from "./cpns/home-loaction.vue";
 import HomeCategories from "./cpns/home-categories.vue";
 import SearchBar from "@/components/search-bar/search-bar.vue";
 import HomeContent from "./cpns/home-content.vue";
-import { useScroll, scrollTop } from "@/hooks/useScroll";
+import useScroll from "@/hooks/useScroll";
 import useHome from "@/stores/modules/home";
 import useMainStore from "@/stores/modules/main";
 import { storeToRefs } from "pinia";
@@ -35,8 +35,14 @@ HomeStore.fetchHouseListAction();
 const mainStore = useMainStore();
 const { nowDate, leaveDate } = storeToRefs(mainStore);
 
-useScroll(() => {
-  HomeStore.fetchHouseListAction();
+const { scrollTop, isReachBottom } = useScroll();
+
+watch(isReachBottom, (newValue, oldValue) => {
+  if (newValue) {
+    HomeStore.fetchHouseListAction().then((res) => {
+      isReachBottom.value = false; 
+    });
+  }
 });
 
 // 搜索框显示控制
