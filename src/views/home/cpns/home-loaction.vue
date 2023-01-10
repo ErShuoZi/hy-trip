@@ -57,13 +57,14 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import useCity from "@/stores/modules/city";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
 import { formatMonthDay, getDiffDate } from "@/utils/format_date";
-import dayjs from "dayjs";
 import useHome from "@/stores/modules/home";
+import useMainStore from "@/stores/modules/main";
+
 const router = useRouter();
 const cityChange = () => {
   router.push("/city");
@@ -85,9 +86,8 @@ const cityStore = useCity();
 const { currentCity } = storeToRefs(cityStore);
 
 // 日期范围处理
-const nowDate = ref(formatMonthDay(new Date()));
-const leaveDate = ref(formatMonthDay(dayjs(new Date()).add(1, "day")));
-const stayCount = ref(getDiffDate(new Date(), dayjs(new Date()).add(1, "day")));
+const mainStore = useMainStore();
+const { nowDate, leaveDate, stayCount } = storeToRefs(mainStore);
 const showCalendar = ref(false);
 const formatter = (day) => {
   if (day.type === "start") {
@@ -106,19 +106,11 @@ const onConfirm = (value) => {
   stayCount.value = getDiffDate(selectStartDate, selectEndDate);
 };
 
-// const arr = [1, 2, 3, [1, 2, 3, 4, 5, 6, 7]];
-// const newArr = Array.from(new Set(arr.flat(2))); // [1,2,3,4,5,6,7]
-// const ArrA = [1, 2, 3];
-// const ArrB = [1, 2, 3, 4, 5, 6];
-// const newArr = ArrB.filter((item) => {
-//   return !ArrA.includes(item);
-// });
-
 // 热门建议
 const HomeStore = useHome();
 HomeStore.fetchHomeSuggestsAction();
 HomeStore.fetchHomeCategoryAction();
-const { hotSuggests, categories } = storeToRefs(HomeStore);
+const { hotSuggests } = storeToRefs(HomeStore);
 
 // 搜索按钮
 const searchBtnClick = () => {
@@ -131,6 +123,11 @@ const searchBtnClick = () => {
     },
   });
 };
+
+defineExpose({
+  showCalendar,
+  onConfirm,
+});
 </script>
 
 <style lang="scss" scoped>

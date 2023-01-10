@@ -1,10 +1,28 @@
 import axios from 'axios'
 import {BASE_URL,BASE_TIME_OUT} from './requestConfig'
+import useMainStore from '@/stores/modules/main'
+const mainStore = useMainStore()
+
+
+
 class LSRequest {
   constructor() {
     this.instance = axios.create({
       baseURL:BASE_URL,
       timeout:BASE_TIME_OUT
+    })
+    this.instance.interceptors.request.use((config => {
+      mainStore.isLoading = true
+      return config
+    }), (err) => {
+      return err
+    })
+    this.instance.interceptors.response.use((res)  => {
+      mainStore.isLoading = false
+      return res
+    },(err) => {
+      mainStore.isLoading = false
+      return err
     })
   }
   request(config){

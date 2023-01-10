@@ -4,6 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^4.0.0
   axios: ^1.2.2
   dayjs: ^1.11.7
+  lodash: ^4.17.21
   normalize.css: ^8.0.1
   pinia: ^2.0.28
   sass: ^1.57.1
@@ -16,6 +17,7 @@ specifiers:
 dependencies:
   axios: registry.npmmirror.com/axios/1.2.2
   dayjs: registry.npmmirror.com/dayjs/1.11.7
+  lodash: registry.npmmirror.com/lodash/4.17.21
   normalize.css: registry.npmmirror.com/normalize.css/8.0.1
   pinia: registry.npmmirror.com/pinia/2.0.28_vue@3.2.45
   vant: registry.npmmirror.com/vant/4.0.7_vue@3.2.45
@@ -790,6 +792,12 @@ packages:
     version: 0.4.2
     engines: {node: '>=14'}
     dev: true
+
+  registry.npmmirror.com/lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz}
+    name: lodash
+    version: 4.17.21
+    dev: false
 
   registry.npmmirror.com/magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/magic-string/-/magic-string-0.25.9.tgz}
