@@ -1,9 +1,11 @@
 <template>
   <div class="tab-bar">
-    <van-tabbar v-model="currentIndex" active-color="#ff9854">
+    <van-tabbar v-model="currentIndex" active-color="#ff9854" route>
       <template v-for="(item, index) in tabbarData">
-        <van-tabbar-item @click="itemClick(index, item)" icon="home-o">
-          <span>{{ item.text }}</span>
+        <van-tabbar-item :to="item.path">
+          <template #default>
+            <span>{{ item.text }}</span>
+          </template>
           <template #icon>
             <img v-if="currentIndex !== index" :src="getAssetUrl(item.image)" />
             <img v-else :src="getAssetUrl(item.imageActive)" />
@@ -16,22 +18,22 @@
 
 <script setup>
 import { getAssetUrl } from "@/utils/load_assets";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-defineProps({
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+const props = defineProps({
   tabbarData: {
     type: Array,
     default: () => [],
   },
 });
 
-let currentIndex = ref(Number(window.sessionStorage.getItem("pageNum")) || 0);
-const router = useRouter();
-const itemClick = (index, item) => {
+const route = useRoute();
+const currentIndex = ref(0);
+watch(route, (newRoute) => {
+  const index = props.tabbarData.findIndex((item) => item.path === newRoute.path);
+  if (index === -1) return;
   currentIndex.value = index;
-  window.sessionStorage.setItem("pageNum", index);
-  router.push(item.path);
-};
+});
 </script>
 
 <style lang="scss" scoped>

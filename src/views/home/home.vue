@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" ref="homeRef">
     <home-nav-bar></home-nav-bar>
     <home-banner></home-banner>
     <home-loaction ref="locationRef"></home-loaction>
@@ -15,8 +15,12 @@
   </div>
 </template>
 
+<script>
+export default { name: "home" };
+</script>
+
 <script setup>
-import { ref, watch, toRaw, onMounted } from "vue";
+import { ref, watch, onMounted, onActivated } from "vue";
 import HomeNavBar from "./cpns/home-nav-bar.vue";
 import HomeBanner from "./cpns/home-banner.vue";
 import HomeLoaction from "./cpns/home-loaction.vue";
@@ -34,13 +38,13 @@ HomeStore.fetchHouseListAction();
 
 const mainStore = useMainStore();
 const { nowDate, leaveDate } = storeToRefs(mainStore);
-
-const { scrollTop, isReachBottom } = useScroll();
+const homeRef = ref();
+const { scrollTop, isReachBottom } = useScroll(homeRef);
 
 watch(isReachBottom, (newValue, oldValue) => {
   if (newValue) {
     HomeStore.fetchHouseListAction().then((res) => {
-      isReachBottom.value = false; 
+      isReachBottom.value = false;
     });
   }
 });
@@ -59,12 +63,21 @@ const searchBtnClick = () => {
   // 通知子组件修改日期
   locationRef.value.showCalendar = true;
 };
+
+// 跳转会Home时,保留原来位置
+onActivated(() => {
+  homeRef.value?.scrollTo({
+    top: scrollTop.value,
+  });
+});
 </script>
 
 <style lang="scss" scoped>
 .home {
-  /* height: calc(100vh - 50px); */
-  /* overflow-y: auto; */
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-bottom: 60px;
   .search {
     position: fixed;
     top: 0;

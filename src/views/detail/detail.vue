@@ -1,6 +1,7 @@
 <template>
   <div class="detail top-page" ref="detailRef">
     <tab-control
+      ref="tabControRef"
       :titles="titles"
       @tab-itemclick="tabItemClick"
       v-if="isShowTopTabBar"
@@ -47,11 +48,15 @@
       />
       <detail-intro :price-intro="mainPart.introductionModule" />
     </div>
+    <div class="footer">
+      <img src="@/assets/img/detail/icon_ensure.png" alt="" />
+      <div class="text">弘源旅途, 永无止境!</div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import useDetailStore from "@/stores/modules/detail";
 import { storeToRefs } from "pinia";
@@ -65,23 +70,23 @@ import DetailNotice from "./cpns/detail-notice.vue";
 import DetailIntro from "./cpns/detail-intro.vue";
 import DetailMap from "./cpns/detail-map.vue";
 import useScroll from "@/hooks/useScroll";
-
+const tabControRef = ref();
 const route = useRoute();
 const id = route.params.id;
 // 页面数据
 const DetailStore = useDetailStore();
 DetailStore.fetchDetailPageDataAction(id);
 const { mainPart } = storeToRefs(DetailStore);
-
 // 返回按钮
 const router = useRouter();
 const onClickLeft = () => {
   router.back();
 };
-
 // control detail page  top tabbar block/display
 const detailRef = ref();
+
 const { scrollTop } = useScroll(detailRef);
+
 const isShowTopTabBar = computed(() => {
   return scrollTop.value > 300;
 });
@@ -98,22 +103,50 @@ const isShowTopTabBar = computed(() => {
 const sectionEls = ref({});
 const titles = computed(() => Object.keys(sectionEls.value));
 const getSectionRef = (value) => {
+  if (!value) return;
   const name = value.$el.getAttribute("name");
   sectionEls.value[name] = value.$el;
 };
 
+let isClick = false;
+let currentDistance = -1;
 const tabItemClick = (index) => {
-  // const key = Object.keys(sectionEls.value)[index];
-  // const el = sectionEls.value[key];
-  let instance = sectionEls.value[titles.value[index]].offsetTop;
+  let distance = sectionEls.value[titles.value[index]].offsetTop;
   if (index !== 0) {
-    instance = instance - 44;
+    distance = distance - 44;
   }
+  isClick = true;
+  currentDistance = distance;
   detailRef.value.scrollTo({
-    top: instance,
+    top: distance,
     behavior: "smooth",
   });
 };
+
+// 页面滚动时,匹配对应索引
+watch(scrollTop, (newValue) => {
+  if (newValue === currentDistance) {
+    isClick = false;
+  }
+  if (isClick) return;
+  // 1.获取所有区域的offsetTops
+  const els = Object.values(sectionEls.value);
+  const values = els.map((el) => el.offsetTop);
+
+  // 2.根据newValue 匹配索引
+  let index = values.length - 1;
+
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > newValue + 44) {
+      index = i - 1;
+      break;
+    }
+  }
+  if (tabControRef.value) {
+    tabControRef.value.currentIndex = index;
+    isClick = false;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -124,5 +157,22 @@ const tabItemClick = (index) => {
   right: 0;
   z-index: 10;
   background: #fff;
+}
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+
+  img {
+    width: 123px;
+  }
+
+  .text {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #7688a7;
+  }
 }
 </style>

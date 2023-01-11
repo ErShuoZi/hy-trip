@@ -11,7 +11,12 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  // css:{
+  //   postcss:{
+  //     plugins:[require("postcss-px-to-viewport")]
+  //   }
+  // }
 })
 
 

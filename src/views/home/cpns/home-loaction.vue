@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="location item">
+    <div class="location section">
       <div class="city" @click="cityChange">{{ currentCity.cityName }}</div>
       <div class="position" @click="positionClick">
         <span class="text">我的位置</span>
@@ -8,7 +8,7 @@
       </div>
     </div>
     <!-- data range -->
-    <div class="date-range item" @click="showCalendar = true">
+    <div class="date-range section" @click="showCalendar = true">
       <div class="start">
         <span class="text">入住</span>
         <span class="date">{{ nowDate }}</span>
@@ -28,14 +28,14 @@
       :round="false"
       :show-confirm="false"
     />
-    <div class="price-counter bottom-gray-line item">
+    <div class="price-counter bottom-gray-line section">
       <div class="start">价格不限</div>
       <div class="end">人数不限</div>
     </div>
-    <div class="keywords bottom-gray-line item">关键字/位置/民宿名</div>
+    <div class="keywords bottom-gray-line section">关键字/位置/民宿名</div>
 
     <!-- 热门建议 -->
-    <div class="hot-suggests">
+    <div class="section hot-suggests">
       <template v-for="(item, index) in hotSuggests" :key="index">
         <div
           class="item"
@@ -50,7 +50,7 @@
     </div>
 
     <!-- 搜索按钮 -->
-    <div class="item search-btn">
+    <div class="section search-btn">
       <div class="btn" @click="searchBtnClick">开始搜索</div>
     </div>
   </div>
@@ -131,10 +131,6 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.item {
-  padding: 0 20px;
-  height: 44px;
-}
 .location {
   display: flex;
   justify-content: space-between;
@@ -165,6 +161,14 @@ defineExpose({
   }
 }
 
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 20px;
+  color: #999;
+  height: 44px;
+}
 .date-range {
   display: flex;
   justify-content: space-between;
@@ -212,17 +216,15 @@ defineExpose({
   color: #999;
 }
 .hot-suggests {
-  display: flex;
-  flex-wrap: wrap;
   margin: 10px 0;
-  padding: 0 20px;
+  height: auto;
 
   .item {
-    height: auto;
-    padding: 3px 8px;
+    padding: 4px 8px;
     margin: 4px;
+    border-radius: 14px;
     font-size: 12px;
-    border-radius: 4px;
+    line-height: 1;
   }
 }
 .search-btn {
@@ -236,8 +238,7 @@ defineExpose({
     text-align: center;
     border-radius: 20px;
     color: #fff;
-    background-image: var(--theme-linear-gradient),
-      linear-gradient(90deg, #fa8c1d, #fcaf3f);
+    background-image: var(--theme-linear-gradient);
   }
 }
 </style>

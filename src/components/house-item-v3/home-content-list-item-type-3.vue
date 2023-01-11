@@ -48,13 +48,15 @@ const itemScore = computed(() => {
     }
     .infos {
       padding: 8px 10px;
+      color: #666;
+      font-size: 12px;
       .location {
+        display: flex;
+        align-items: center;
         img {
           position: relative;
-          top: 3px;
-          left: -6px;
-          width: 10px;
-          height: 10px;
+          width: 12px;
+          height: 12px;
         }
         .address {
           color: #666;
@@ -68,6 +70,9 @@ const itemScore = computed(() => {
       }
       .house-name {
         margin: 5px 0;
+        font-size: 14px;
+        color: #333;
+
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -76,8 +81,8 @@ const itemScore = computed(() => {
       }
       .price {
         display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
+        align-items: flex-start;
+        margin: 8px 0;
         .new {
           color: #ff9645;
           font-size: 14px;
@@ -91,8 +96,9 @@ const itemScore = computed(() => {
         .tips {
           background-image: linear-gradient(270deg, #f66, #ff9f9f);
           color: #fff;
-          padding: 0 5px;
-          border-radius: 14px;
+          padding: 0 6px;
+          border-radius: 8px;
+          font-size: 12px;
         }
       }
     }

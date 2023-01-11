@@ -1,10 +1,15 @@
 <template>
   <div class="app">
-    <router-view></router-view>
+    <router-view v-slot="props">
+      <keep-alive include="home">
+        <component :is="props.Component" />
+      </keep-alive>
+    </router-view>
+
     <!-- 方案一:路由meta -->
-    <tab-bar v-if="route.meta.showTabBar" :tabbarData="tabbarData"></tab-bar>
+    <tab-bar v-show="route.meta.showTabBar" :tabbarData="tabbarData"></tab-bar>
     <!-- <tab-bar :tabbarData="tabbarData"></tab-bar> -->
-    <loading ></loading>
+    <loading></loading>
   </div>
 </template>
 

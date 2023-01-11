@@ -2,6 +2,7 @@ import { onMounted,onUnmounted, onActivated,onDeactivated } from 'vue'
 import * as  _ from 'lodash'
 import { ref } from 'vue'
 export default function useScroll (elRef) {
+
     let el = window
     const scrollTop  = ref(0)
     const scrollHeight = ref(0)
@@ -23,7 +24,6 @@ export default function useScroll (elRef) {
     if (clientHeigt.value + scrollTop.value >= scrollHeight.value) {
       isReachBottom.value = true
     }
-
   },100)
   
   onMounted(() => {
